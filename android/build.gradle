@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        google() // Google's Maven repository
+        mavenCentral() // Maven Central repository
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.0.2' // Gradle version
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+// Add this block for build performance improvements
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
